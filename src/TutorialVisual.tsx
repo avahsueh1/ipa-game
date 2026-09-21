@@ -149,53 +149,77 @@ export function TutorialVisual({
         </>
       ) : kind === "lips" || kind === "opening" ? (
         <>
-          <path
-            d="M94 26Q100 45 90 53M146 26Q140 45 150 53"
-            stroke="#CBAC90"
-            strokeWidth="3"
-            fill="none"
-            strokeLinecap="round"
-          />
-          <ellipse
-            cx="120"
-            cy="106"
-            rx={round ? 32 : 64}
-            ry={
-              kind === "opening"
-                ? opening + 10
-                : round
-                  ? 43
-                  : f === "teeth on lip"
-                    ? 25
-                    : 22
-            }
-            fill={pink}
-          />
-          <ellipse
-            cx="120"
-            cy="106"
-            rx={round ? 20 : 52}
-            ry={
-              kind === "opening"
-                ? opening
-                : round
-                  ? 29
-                  : f === "both lips"
-                    ? fricative
-                      ? 4
-                      : 1.5
-                    : 9
-            }
-            fill={green}
-          />
-          {f === "teeth on lip" && (
+          {f === "teeth on lip" ? (
             <>
-              <path d="M75 90H165L157 111H83Z" fill="#FFFDF2" />
-              <path d="M120 91V108" stroke="#DCDDD1" strokeWidth="2" />
+              {/* Upper lip lifts to expose the teeth; lower lip meets their edge. */}
               <path
-                d="M81 116Q120 132 159 116"
-                stroke={pink}
-                strokeWidth="12"
+                d="M49 96Q73 78 94 79Q109 80 120 85Q131 80 146 79Q167 78 191 96Q164 118 120 119Q76 118 49 96Z"
+                fill="#A75F69"
+              />
+              <path
+                d="M65 91Q120 81 175 91L165 108Q120 116 75 108Z"
+                fill="#FFFDF5"
+              />
+              <path
+                d="M96 88V108M120 87V110M144 88V108"
+                stroke="#DED5C9"
+                strokeWidth="1.5"
+              />
+              <path
+                d="M49 96Q77 94 91 101Q120 111 149 101Q163 94 191 96Q173 132 120 133Q67 132 49 96Z"
+                fill={pink}
+              />
+              <path
+                d="M83 105Q120 116 157 105"
+                stroke="#B46C76"
+                strokeWidth="2.5"
+                fill="none"
+                strokeLinecap="round"
+              />
+              <path
+                d="M49 96Q81 62 104 76L120 82L136 76Q159 62 191 96Q164 85 143 88Q120 94 97 88Q76 85 49 96Z"
+                fill={pink}
+              />
+            </>
+          ) : (
+            <>
+              {round || kind === "opening" ? (
+                <ellipse
+                  cx="120"
+                  cy="100"
+                  rx={round ? 32 : 60}
+                  ry={kind === "opening" ? opening + 10 : 43}
+                  fill={pink}
+                />
+              ) : (
+                <path
+                  d="M49 100Q79 72 103 81Q113 85 120 85Q127 85 137 81Q161 72 191 100Q165 128 120 127Q75 128 49 100Z"
+                  fill={pink}
+                />
+              )}
+              <ellipse
+                cx="120"
+                cy="100"
+                rx={round ? 20 : 51}
+                ry={
+                  kind === "opening"
+                    ? opening
+                    : round
+                      ? 29
+                      : f === "both lips"
+                        ? fricative
+                          ? 4
+                          : 1.5
+                        : 9
+                }
+                fill={green}
+              />
+              <path
+                d={
+                  round ? "M106 133Q120 140 134 133" : "M97 116Q120 121 143 116"
+                }
+                stroke="#EDB0AE"
+                strokeWidth="3"
                 fill="none"
                 strokeLinecap="round"
               />
@@ -312,15 +336,38 @@ export function TutorialVisual({
         </>
       ) : (
         <>
+          {/* A side profile with a curved nose, distinct lips, jaw, ear and neck. */}
           <path
-            d="M57 38Q77 38 82 61L95 78L82 84L88 100L78 107Q78 133 56 136V156H30V113Q14 78 29 49Q38 36 57 38"
+            d="M23 180V165Q25 151 44 146L48 127H70V147Q97 152 101 180Z"
+            fill="#79BCAD"
+          />
+          <path d="M43 150L48 118L67 113L68 146Q58 157 43 150Z" fill={skin} />
+          <path
+            d="M28 79Q21 43 47 34Q72 26 82 47Q86 56 83 66L86 77Q89 82 96 85Q99 89 94 91L85 92L86 97Q92 98 89 101L85 104Q91 111 84 117Q77 125 65 126Q47 124 39 108Z"
             fill={skin}
           />
-          <circle cx="65" cy="60" r="3" fill={green} />
           <path
-            d="M77 98H86"
+            d="M28 87Q13 64 26 43Q38 25 61 29Q80 30 85 48Q65 56 47 47Q43 68 34 77L35 91Z"
+            fill={green}
+          />
+          <ellipse cx="39" cy="88" rx="9" ry="13" fill={skin} />
+          <path
+            d="M38 83Q45 80 44 89L40 94"
+            fill="none"
+            stroke="#C89978"
+            strokeWidth="2"
+            strokeLinecap="round"
+          />
+          <path
+            d="M72 69L78 70"
             stroke={green}
-            strokeWidth="4"
+            strokeWidth="2.5"
+            strokeLinecap="round"
+          />
+          <path
+            d="M83 101H90"
+            stroke={green}
+            strokeWidth="2"
             strokeLinecap="round"
           />
           {f === "nose hum" ? (

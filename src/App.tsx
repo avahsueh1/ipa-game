@@ -642,7 +642,7 @@ export default function App() {
             className="dialog chart-dialog"
             role="dialog"
             aria-modal="true"
-            aria-label="Unit IPA chart"
+            aria-label="Unit lessons"
           >
             <button
               className="close icon-btn"
@@ -654,14 +654,57 @@ export default function App() {
             >
               <X />
             </button>
-            <h2>IPA chart · Unit {selectedLevel}</h2>
-            <IPAChart
-              pool={sounds.filter((s) => s.level === selectedLevel)}
-              play={play}
-              learn={learnSound}
-              ready={ready}
-              playing={playing}
-            />
+            <p className="eyebrow">Unit {selectedLevel}</p>
+            <h2>{levels[selectedLevel - 1].name}</h2>
+            <ol className="unit-lesson-list">
+              {lessons
+                .filter((l) => l.level === selectedLevel)
+                .map((l) => {
+                  const complete = progress.completed.has(l.id);
+                  return (
+                    <li key={l.id}>
+                      <button
+                        className="unit-lesson-button"
+                        disabled={!ready}
+                        onClick={() => start(l)}
+                      >
+                        <span className="unit-lesson-number">
+                          {complete ? (
+                            <Check size={22} aria-label="Completed" />
+                          ) : (
+                            l.index + 1
+                          )}
+                        </span>
+                        <span className="unit-lesson-content">
+                          <strong>Lesson {l.index + 1}</strong>
+                          <span className="unit-sound-preview">
+                            {l.sounds.map((s) => (
+                              <span key={s.id}>
+                                <b>/{s.symbol}/</b>
+                                <small>{s.example || "Listen and try"}</small>
+                              </span>
+                            ))}
+                          </span>
+                        </span>
+                        <span className="unit-lesson-action">
+                          {complete ? "Review" : "Learn"}
+                          <ArrowRight size={18} />
+                        </span>
+                      </button>
+                    </li>
+                  );
+                })}
+            </ol>
+            <details className="unit-chart-reference">
+              <summary>Explore this unit’s sound chart</summary>
+              <IPAChart
+                pool={sounds.filter((s) => s.level === selectedLevel)}
+                play={play}
+                learn={learnSound}
+                ready={ready}
+                playing={playing}
+              />
+            </details>
             {audioError && <p role="alert">{audioError}</p>}
           </section>
         </div>

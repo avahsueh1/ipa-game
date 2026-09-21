@@ -2405,79 +2405,81 @@ footer {
     width: 55%;
   }
 }
-.w-sound-guide {
-  margin-top: 22px;
-  padding: 24px;
-  border: 1px solid #dce5d7;
-  border-radius: 16px;
-  background: #fff;
+/* A unit leads with its lessons; the chart is an optional reference. */
+.unit-lesson-list {
+  list-style: none;
+  padding: 0;
+  margin: 24px 0;
+  display: grid;
+  gap: 12px;
 }
-.w-guide-heading {
+.unit-lesson-button {
+  width: 100%;
   display: flex;
-  gap: 18px;
   align-items: center;
+  gap: 20px;
+  padding: 22px;
+  text-align: left;
+  background: #eff4e9;
+  border-radius: 18px;
+  color: #2b4238;
 }
-.w-guide-heading h3 {
-  margin: 0 0 7px;
-  font-size: 21px;
+.unit-lesson-button:hover {
+  background: #e2eee0;
 }
-.w-guide-heading p {
-  font-size: 14px;
-  margin: 0;
-  line-height: 1.6;
+.unit-lesson-number {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: #d5e7d4;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  font-weight: 700;
+}
+.unit-lesson-content {
+  flex: 1;
+}
+.unit-sound-preview {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  margin-top: 12px;
+}
+.unit-sound-preview > span {
+  display: grid;
+  gap: 3px;
+}
+.unit-sound-preview b {
+  font-size: 26px;
+  font-weight: 500;
+}
+.unit-sound-preview small {
+  font-size: 13px;
   color: #63735f;
 }
-.w-guide-heading .chart-sound {
-  min-width: 70px;
-}
-.w-guide-steps {
+.unit-lesson-action {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 20px;
-  max-width: 520px;
-  margin: 22px auto;
-}
-.w-guide-steps figure {
-  margin: 0;
-  flex: 1;
-  min-width: 0;
-}
-.w-guide-steps figcaption {
-  margin-top: 10px;
-  text-align: center;
-  font-size: 14px;
-  font-weight: 600;
-}
-.w-step-arrow {
-  flex-shrink: 0;
-  color: #43896f;
-}
-.w-guide-actions {
-  display: flex;
-  gap: 28px;
-  justify-content: center;
-  flex-wrap: wrap;
-}
-.w-guide-actions .text-btn {
-  display: inline-flex;
   align-items: center;
   gap: 8px;
+  font-weight: 700;
+}
+.unit-chart-reference > summary {
+  cursor: pointer;
+  padding: 18px 0;
+  font-weight: 700;
 }
 @media (max-width: 600px) {
-  .w-sound-guide {
+  .unit-lesson-button {
     padding: 16px;
-  }
-  .w-guide-heading {
     gap: 12px;
+    flex-wrap: wrap;
   }
-  .w-guide-heading h3 {
-    font-size: 18px;
+  .unit-sound-preview {
+    gap: 16px;
   }
-  .w-guide-steps {
-    gap: 10px;
-  }
-  .w-guide-steps figcaption {
-    font-size: 12px;
+  .unit-lesson-action {
+    width: 100%;
+    justify-content: flex-end;
   }
 }

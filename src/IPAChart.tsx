@@ -13,6 +13,7 @@ const places = [
   "Soft roof",
   "Uvula",
   "Throat",
+  "Lips + back of tongue",
 ];
 const placeFeatures = [
   "Both lips",
@@ -24,6 +25,7 @@ const placeFeatures = [
   "Back of mouth",
   "Very back of mouth",
   "Throat",
+  "Round lips",
 ];
 const airflow: Record<string, string> = {
   Stop: "pop",
@@ -52,27 +54,27 @@ const rows = [
   {
     label: "Stop",
     help: "Stop, then release air",
-    cells: ["p b", "", "", "t d", "", "", "k ɡ", "", ""],
+    cells: ["p b", "", "", "t d", "", "", "k ɡ", "", "", ""],
   },
   {
     label: "Nasal",
     help: "Air through the nose",
-    cells: ["m", "", "", "n", "", "ɲ", "ŋ", "", ""],
+    cells: ["m", "", "", "n", "", "ɲ", "ŋ", "", "", ""],
   },
   {
     label: "Fricative",
     help: "Air through a narrow gap",
-    cells: ["ɸ β", "f v", "θ ð", "s z", "ʃ ʒ", "ç", "x", "ʁ", "h"],
+    cells: ["ɸ β", "f v", "θ ð", "s z", "ʃ ʒ", "ç", "x", "ʁ", "h", ""],
   },
   {
     label: "Approximant",
     help: "Air flows smoothly",
-    cells: ["", "", "", "ɹ", "", "j", "", "", ""],
+    cells: ["", "", "", "ɹ", "", "j", "", "", "", "w"],
   },
   {
     label: "Lateral",
     help: "Air around tongue sides",
-    cells: ["", "", "", "l", "", "ʎ", "", "", ""],
+    cells: ["", "", "", "l", "", "ʎ", "", "", "", ""],
   },
 ];
 const vowelRows = [
@@ -238,45 +240,6 @@ export function IPAChart({
                 ))}
               </tbody>
             </table>
-          </div>
-        </section>
-      )}
-      {symbols.has("w") && (
-        <section className="w-sound-guide" aria-label="How to say w">
-          <div className="w-guide-heading">
-            {tile("w")}
-            <div>
-              <h3>“w” as in water</h3>
-              <p>Round your lips, then open them as you start “water.”</p>
-            </div>
-          </div>
-          <div className="w-guide-steps">
-            <figure>
-              <TutorialVisual feature="Round lips" />
-              <figcaption>1. Round your lips</figcaption>
-            </figure>
-            <ArrowRight className="w-step-arrow" aria-hidden="true" />
-            <figure>
-              <TutorialVisual feature="relaxed lips" />
-              <figcaption>2. Open into the word</figcaption>
-            </figure>
-          </div>
-          <div className="w-guide-actions">
-            <button
-              className="text-btn"
-              onClick={() => play(symbols.get("w")!)}
-            >
-              <Volume2 size={18} />
-              {playing === symbols.get("w")!.id ? "Playing…" : "Hear /w/"}
-            </button>
-            <button
-              className="text-btn"
-              disabled={!ready}
-              onClick={() => learn(symbols.get("w")!)}
-            >
-              Try the tutorial
-              <ArrowRight size={17} />
-            </button>
           </div>
         </section>
       )}

@@ -81,6 +81,7 @@ function explain(feature: string, sound: Sound) {
 }
 export function LearningModule({
   lesson,
+  initialStep = -1,
   play,
   playing,
   audioError,
@@ -88,13 +89,14 @@ export function LearningModule({
   complete,
 }: {
   lesson: Lesson;
+  initialStep?: number;
   play: (sound: Sound) => void;
   playing: string | null;
   audioError: string;
   close: () => void;
   complete: () => void;
 }) {
-  const [step, setStep] = useState(-1);
+  const [step, setStep] = useState(initialStep);
   const level = levels[lesson.level - 1],
     sound = lesson.sounds[step];
   return (

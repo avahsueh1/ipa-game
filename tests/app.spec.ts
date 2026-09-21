@@ -149,12 +149,12 @@ test("library search, audio decode, exit confirmation, and small screen layout",
       () => document.documentElement.scrollWidth <= window.innerWidth,
     ),
   ).toBeTruthy();
-  await page
-    .getByRole("button", { name: "Sound library", exact: true })
-    .click();
+  await page.getByRole("button", { name: "IPA chart", exact: true }).click();
   await page.getByRole("textbox", { name: "Search sounds" }).fill("moon");
-  await expect(page.locator(".sound-card")).toHaveCount(1);
-  await page.getByRole("button", { name: "Play m", exact: true }).click();
+  await expect(page.locator(".chart-sound")).toHaveCount(1);
+  await page
+    .getByRole("button", { name: "Hear m as in moon", exact: true })
+    .click();
   const decodable = await page.evaluate(async () => {
     const context = new AudioContext();
     try {

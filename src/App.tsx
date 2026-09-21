@@ -13,7 +13,6 @@ import {
   Map,
   Gamepad2,
   Music2,
-  Play,
   Search,
   Sparkles,
   Star,
@@ -23,7 +22,7 @@ import {
 } from "lucide-react";
 import { LearningModule } from "./LearningModule";
 import { Games } from "./Games";
-import { EnglishHint } from "./EnglishHint";
+import { IPAChart } from "./IPAChart";
 import { Frog } from "./Frog";
 import { levels, lessons, sounds, type Lesson, type Sound } from "./data";
 import { localDay, stats, type LessonEvent } from "./progress";
@@ -59,6 +58,7 @@ export default function App() {
   const { user, events, save, status, ready } = useProgress();
   const [now, setNow] = useState(() => new Date());
   const progress = stats(events, now);
+  const [studyStart, setStudyStart] = useState(-1);
   const [study, setStudy] = useState<Lesson | null>(null);
   const [gameKind, setGameKind] = useState<number | undefined>();
   useEffect(() => {
@@ -169,13 +169,18 @@ export default function App() {
       );
     });
   }
-  function start(next: Lesson) {
+  function start(next: Lesson, sound?: Sound) {
     if (!ready) return;
     stopAudio();
     setAudioError("");
     setSelectedLevel(null);
     setLesson(null);
+    setStudyStart(sound ? next.sounds.findIndex((s) => s.id === sound.id) : -1);
     setStudy(next);
+  }
+  function learnSound(sound: Sound) {
+    const group = lessons.find((l) => l.sounds.some((s) => s.id === sound.id));
+    if (group) start(group, sound);
   }
   function startGame(kind: number, level: number) {
     beginQuiz(
@@ -274,7 +279,7 @@ export default function App() {
             [
               [Map, "learn", "My learning"],
               [Gamepad2, "games", "Games"],
-              [AudioLines, "library", "Sound library"],
+              [AudioLines, "library", "IPA chart"],
               [Trophy, "progress", "My progress"],
             ] as const
           ).map(([Icon, id, label]) => (
@@ -334,7 +339,7 @@ export default function App() {
                 : page === "games"
                   ? "Games"
                   : page === "library"
-                    ? "Sound library"
+                    ? "IPA chart"
                     : page === "progress"
                       ? "My progress"
                       : "Audio & credits"}
@@ -456,7 +461,7 @@ export default function App() {
           {page === "library" && (
             <>
               <div className="page-heading">
-                <h1>Sound library</h1>
+                <h1>IPA chart</h1>
               </div>
               <div className="library-toolbar">
                 <label className="search">
@@ -486,36 +491,19 @@ export default function App() {
                 the consonant itself. English examples depend on your accent;
                 /e/ and /o/ here are steady vowels, not English diphthongs.
               </p>
-              <div className="sound-grid">
-                {sounds
-                  .filter(
-                    (s) =>
-                      (!filter || s.level === filter) &&
-                      `${s.symbol} ${s.name} ${s.example}`
-                        .toLowerCase()
-                        .includes(query.toLowerCase()),
-                  )
-                  .map((s) => (
-                    <article className="sound-card" key={s.id}>
-                      <div>
-                        <span className="ipa">{s.symbol}</span>
-                        <button
-                          className="sound-play"
-                          aria-label={`Play ${s.symbol}`}
-                          onClick={() => play(s)}
-                        >
-                          <Volume2 size={20} />
-                        </button>
-                      </div>
-                      <h3>{s.name}</h3>
-                      <p>{s.feature}</p>
-                      <EnglishHint symbol={s.symbol} compact />
-                      {playing === s.id && (
-                        <span className="playing">Playing…</span>
-                      )}
-                    </article>
-                  ))}
-              </div>
+              <IPAChart
+                pool={sounds.filter(
+                  (s) =>
+                    (!filter || s.level === filter) &&
+                    `${s.symbol} ${s.name} ${s.example}`
+                      .toLowerCase()
+                      .includes(query.toLowerCase()),
+                )}
+                play={play}
+                learn={learnSound}
+                ready={ready}
+                playing={playing}
+              />
               {!sounds.some(
                 (s) =>
                   (!filter || s.level === filter) &&
@@ -647,46 +635,37 @@ export default function App() {
       {selectedLevel !== null && (
         <div className="overlay">
           <section
-            className="dialog"
+            className="dialog chart-dialog"
             role="dialog"
             aria-modal="true"
-            aria-label="Choose a lesson"
+            aria-label="Unit IPA chart"
           >
             <button
               className="close icon-btn"
               aria-label="Close lessons"
-              onClick={() => setSelectedLevel(null)}
+              onClick={() => {
+                stopAudio();
+                setSelectedLevel(null);
+              }}
             >
               <X />
             </button>
-            <span className="eyebrow">LEVEL {selectedLevel}</span>
-            <h2>{levels[selectedLevel - 1].name}</h2>
-            <p>{levels[selectedLevel - 1].description}</p>
-            <div className="lesson-list">
-              {lessons
-                .filter((l) => l.level === selectedLevel)
-                .map((l) => (
-                  <button key={l.id} disabled={!ready} onClick={() => start(l)}>
-                    <span>
-                      <strong>Lesson {l.index + 1}</strong>
-                      <span className="lesson-symbols">
-                        {l.sounds.map((s) => s.symbol).join(" · ")}
-                      </span>
-                    </span>
-                    {progress.completed.has(l.id) ? (
-                      <Check />
-                    ) : (
-                      <Play size={18} />
-                    )}
-                  </button>
-                ))}
-            </div>
+            <h2>IPA chart · Unit {selectedLevel}</h2>
+            <IPAChart
+              pool={sounds.filter((s) => s.level === selectedLevel)}
+              play={play}
+              learn={learnSound}
+              ready={ready}
+              playing={playing}
+            />
+            {audioError && <p role="alert">{audioError}</p>}
           </section>
         </div>
       )}
       {study && (
         <LearningModule
-          key={study.id}
+          key={`${study.id}-${studyStart}`}
+          initialStep={studyStart}
           lesson={study}
           play={play}
           playing={playing}

@@ -117,7 +117,7 @@ export default function App() {
     const focusables = () =>
       Array.from(
         dialog?.querySelectorAll<HTMLElement>(
-          "button:not(:disabled),input,select,a[href]",
+          "button:not(:disabled),input,select,a[href],summary",
         ) || [],
       );
     focusables()[0]?.focus();

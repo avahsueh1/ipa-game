@@ -1984,3 +1984,113 @@ footer {
     align-items: center;
   }
 }
+.tutorial-visual {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.study-body {
+  max-width: 880px;
+}
+.study-body .study-symbol {
+  font-size: 58px;
+  margin: 4px 0;
+}
+.sound-term {
+  font-size: 13px;
+  color: #657663;
+  margin: 8px auto 18px;
+}
+.sound-term summary {
+  cursor: pointer;
+}
+.study-notes {
+  gap: 18px;
+}
+.study-notes > div {
+  padding: 0 0 16px;
+  border: 0;
+  background: transparent;
+}
+.study-notes strong {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 16px;
+  font-size: 15px;
+}
+.study-notes p {
+  margin: 10px 0 0;
+}
+.instruction-number {
+  display: inline-grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #e2ebdc;
+  font-size: 11px;
+  flex-shrink: 0;
+}
+.intro-visuals {
+  display: flex;
+  justify-content: center;
+  gap: 22px;
+  margin: 26px auto;
+  max-width: 720px;
+}
+.intro-visuals > div {
+  flex: 1;
+  max-width: 255px;
+}
+.intro-visuals strong {
+  display: block;
+  margin: 12px 0 5px;
+  font-size: 15px;
+}
+.intro-visuals .text-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+.study-symbols {
+  margin: 20px 0;
+}
+.study-symbols span {
+  height: 48px;
+  width: 48px;
+  font-size: 28px;
+  border-radius: 14px;
+}
+@media (max-width: 600px) {
+  .intro-visuals {
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .intro-visuals > div {
+    min-width: 120px;
+  }
+  .study-notes {
+    gap: 16px;
+  }
+  .study-notes > div {
+    display: grid;
+    grid-template-columns: 128px 1fr;
+    gap: 0 14px;
+    padding: 0;
+  }
+  .study-notes .tutorial-visual {
+    grid-row: span 2;
+  }
+  .study-notes strong {
+    margin-top: 3px;
+    font-size: 14px;
+  }
+  .study-notes p {
+    margin: 5px 0 0;
+    font-size: 12px;
+  }
+  .study-example {
+    margin: 15px auto;
+  }
+}

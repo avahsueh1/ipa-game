@@ -56,3 +56,9 @@ The dashboard reported **No repository connected** during initial setup. GitHub 
 ## Deployment
 
 The app builds to `dist/`, suitable for Vercel or Netlify. Set the two public Supabase environment variables for the deployment, build with `npm run build`, and add the final site's URL to Supabase's redirect allowlist. No production deployment is created by this initial build.
+
+## Visual tutorials
+
+Every curriculum sound has three SVG instruction panels covering its articulation features. Unit introductions include visual concept guides and the first unit includes m/f listening comparisons. Technical names are expandable. Diagrams are simplified teaching cues, not anatomical scans. Vowel position conventions follow the International Phonetic Association chart: https://www.internationalphoneticassociation.org/IPAcharts/IPA_charts_TI/IPA_charts_TI.html. All illustrations are original SVG code.
+
+Verified all 129 per-sound diagram renders and the /p/ tutorial at desktop and 390px mobile width, with no horizontal dialog overflow.

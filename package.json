@@ -1,7 +1,7 @@
 {
   "name": "ipa-game",
   "version": "1.0.0",
-  "description": "Ribbit: a gentle IPA learning game with Pip the dart frog",
+  "description": "Ribbit: a gentle IPA learning game with Riff the dart frog",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",

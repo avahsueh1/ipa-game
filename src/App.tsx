@@ -12,6 +12,7 @@ import {
   Lock,
   LogOut,
   Map,
+  Gamepad2,
   Music2,
   Play,
   Search,
@@ -22,13 +23,15 @@ import {
   Volume2,
   X,
 } from "lucide-react";
+import { LearningModule } from "./LearningModule";
+import { Games } from "./Games";
 import { Frog } from "./Frog";
 import { levels, lessons, sounds, type Lesson, type Sound } from "./data";
 import { localDay, stats, type LessonEvent } from "./progress";
 import { useProgress } from "./useProgress";
 import { supabase } from "./backend";
 import credits from "./audio-credits.json";
-type Page = "learn" | "library" | "progress" | "credits";
+type Page = "games" | "learn" | "library" | "progress" | "credits";
 type Question = { sound: Sound; kind: number; choices: Sound[] };
 function shuffle<T>(list: T[]) {
   const result = [...list];
@@ -38,10 +41,10 @@ function shuffle<T>(list: T[]) {
   }
   return result;
 }
-function questions(lesson: Lesson): Question[] {
+function questions(lesson: Lesson, gameKind?: number): Question[] {
   return Array.from({ length: 6 }, (_, i) => {
     const sound = lesson.sounds[i % lesson.sounds.length],
-      kind = (i + Math.floor(i / 3)) % 3;
+      kind = gameKind ?? (i + Math.floor(i / 3)) % 3;
     const alternatives = shuffle(
       sounds.filter(
         (s) =>
@@ -55,7 +58,19 @@ function questions(lesson: Lesson): Question[] {
 }
 export default function App() {
   const { user, events, save, status, ready } = useProgress();
-  const progress = stats(events);
+  const [now, setNow] = useState(() => new Date());
+  const progress = stats(events, now);
+  const [study, setStudy] = useState<Lesson | null>(null);
+  const [gameKind, setGameKind] = useState<number | undefined>();
+  useEffect(() => {
+    const refresh = () => setNow(new Date());
+    const timer = window.setInterval(refresh, 30000);
+    document.addEventListener("visibilitychange", refresh);
+    return () => {
+      clearInterval(timer);
+      document.removeEventListener("visibilitychange", refresh);
+    };
+  }, []);
   const [page, setPage] = useState<Page>("learn"),
     [selectedLevel, setSelectedLevel] = useState<number | null>(null),
     [query, setQuery] = useState(""),
@@ -73,9 +88,30 @@ export default function App() {
     [sending, setSending] = useState(false),
     [audioError, setAudioError] = useState(""),
     [playing, setPlaying] = useState<string | null>(null);
+  useEffect(() => {
+    const callback = new URLSearchParams(window.location.hash.slice(1));
+    if (callback.has("error")) {
+      setAuthMessage(
+        "That sign-in link has expired or could not be verified. Request a fresh link below.",
+      );
+      setAccount(true);
+      window.history.replaceState(
+        null,
+        "",
+        window.location.pathname + window.location.search,
+      );
+    }
+  }, []);
+  useEffect(() => {
+    if (user) {
+      setAccount(false);
+      setAuthMessage("");
+    }
+  }, [user?.id]);
   const audio = useRef<HTMLAudioElement | null>(null);
   const finishGuard = useRef(false);
-  const modalOpen = account || selectedLevel !== null || lesson !== null;
+  const modalOpen =
+    account || selectedLevel !== null || lesson !== null || study !== null;
   useEffect(() => {
     if (!modalOpen) return;
     const previous = document.activeElement as HTMLElement;
@@ -108,7 +144,7 @@ export default function App() {
       document.removeEventListener("keydown", trap);
       previous?.focus();
     };
-  }, [modalOpen, account, selectedLevel, !!lesson]);
+  }, [modalOpen, account, selectedLevel, !!lesson, !!study]);
   const unlocked = (level: number) =>
     level === 1 ||
     lessons
@@ -139,8 +175,29 @@ export default function App() {
     stopAudio();
     setAudioError("");
     setSelectedLevel(null);
+    setLesson(null);
+    setStudy(next);
+  }
+  function startGame(kind: number, level: number) {
+    beginQuiz(
+      {
+        id: `game-${kind}-${level}`,
+        level,
+        index: 0,
+        sounds: shuffle(sounds.filter((s) => s.level === level)).slice(0, 3),
+      },
+      kind,
+    );
+  }
+  function beginQuiz(next: Lesson, kind?: number) {
+    if (!ready) return;
+    stopAudio();
+    setAudioError("");
+    setSelectedLevel(null);
     setLesson(next);
-    setQs(questions(next));
+    setStudy(null);
+    setGameKind(kind);
+    setQs(questions(next, kind));
     setIndex(0);
     setAnswer(null);
     setFinished(false);
@@ -182,6 +239,7 @@ export default function App() {
         completedAt: new Date().toISOString(),
         day: localDay(),
       };
+      setNow(new Date());
       save(complete);
       setEvent(complete);
       setFinished(true);
@@ -194,6 +252,7 @@ export default function App() {
     stopAudio();
     setAudioError("");
     setPage(next);
+    window.scrollTo({ top: 0, behavior: "instant" });
   }
   const q = qs[index];
   return (
@@ -216,6 +275,7 @@ export default function App() {
           {(
             [
               [Map, "learn", "My learning"],
+              [Gamepad2, "games", "Games"],
               [AudioLines, "library", "Sound library"],
               [Trophy, "progress", "My progress"],
             ] as const
@@ -256,7 +316,12 @@ export default function App() {
                 className="icon-btn"
                 aria-label="Sign out"
                 onClick={() => {
-                  void supabase?.auth.signOut();
+                  void supabase?.auth.signOut().then(({ error }) => {
+                    if (error) {
+                      setAuthMessage("Could not sign out. Please try again.");
+                      setAccount(true);
+                    }
+                  });
                 }}
               >
                 <LogOut size={17} />
@@ -280,11 +345,13 @@ export default function App() {
             <span>
               {page === "learn"
                 ? "My learning"
-                : page === "library"
-                  ? "Sound library"
-                  : page === "progress"
-                    ? "My progress"
-                    : "Audio & credits"}
+                : page === "games"
+                  ? "Games"
+                  : page === "library"
+                    ? "Sound library"
+                    : page === "progress"
+                      ? "My progress"
+                      : "Audio & credits"}
             </span>
           </div>
           <div className="top-stats">
@@ -300,6 +367,7 @@ export default function App() {
           </div>
         </header>
         <div className="content">
+          {page === "games" && <Games start={startGame} ready={ready} />}
           {page === "learn" && (
             <>
               <div className="page-heading">
@@ -334,12 +402,12 @@ export default function App() {
                   >
                     {progress.completed.size
                       ? "Continue learning"
-                      : "Let’s play"}
+                      : "Start learning"}
                     <ArrowRight size={19} />
                   </button>
                   <span className="under-button">
-                    <span>6 questions</span>
-                    <span>~2 minutes</span>
+                    <span>Learn + 6 questions</span>
+                    <span>~4 minutes</span>
                     <span>No pressure</span>
                   </span>
                 </div>
@@ -351,9 +419,11 @@ export default function App() {
                   <span className="spark spark-one">✳</span>
                   <span className="spark spark-two">✧</span>
                   <div className="frog-bubble">
-                    Hi, I’m Pip. Let’s hop to it!
+                    {progress.practicedToday
+                      ? "You earned my crown today!"
+                      : "Hi, I’m Riff. Let’s hop to it!"}
                   </div>
-                  <Frog />
+                  <Frog crowned={progress.practicedToday} />
                   <span className="frog-caption">
                     TINY FROG. BIG CURIOSITY.
                   </span>
@@ -403,7 +473,7 @@ export default function App() {
                           style={{ background: level.color }}
                         >
                           {i === 0 ? (
-                            <Frog />
+                            <Frog crowned={progress.practicedToday} />
                           ) : i === 1 ? (
                             <Leaf />
                           ) : i === 2 ? (
@@ -585,7 +655,7 @@ export default function App() {
                 })}
               </div>
               <div className="progress-detail">
-                <Frog />
+                <Frog crowned={progress.practicedToday} />
                 <div>
                   <h2>
                     {progress.completed.size
@@ -635,8 +705,8 @@ export default function App() {
                 Audio is provided unmodified under the licenses below. Some
                 consonants are recorded with an “ah” before or after them.
                 Listen for the consonant in the middle. Speakers and accents
-                vary. Original Ribbit logo and Pip illustration were created for
-                this app. This first release covers 43 sounds; it is not the
+                vary. Original Ribbit logo and Riff illustration were created
+                for this app. This first release covers 43 sounds; it is not the
                 complete IPA chart.
               </p>
               <div className="credits-list">
@@ -725,17 +795,31 @@ export default function App() {
           </section>
         </div>
       )}
+      {study && (
+        <LearningModule
+          key={study.id}
+          lesson={study}
+          play={play}
+          playing={playing}
+          audioError={audioError}
+          close={() => {
+            stopAudio();
+            setStudy(null);
+          }}
+          complete={() => beginQuiz(study)}
+        />
+      )}
       {lesson && (
         <div
           className="lesson-screen"
           role="dialog"
           aria-modal="true"
-          aria-label="Sound lesson"
+          aria-label={gameKind !== undefined ? "Sound game" : "Sound lesson"}
         >
           <div className="lesson-header">
             <button
               className="icon-btn"
-              aria-label="Exit lesson"
+              aria-label={gameKind !== undefined ? "Exit game" : "Exit lesson"}
               onClick={() => {
                 stopAudio();
                 if (finished) setLesson(null);
@@ -768,15 +852,15 @@ export default function App() {
                   setExit(false);
                 }}
               >
-                Leave lesson
+                {gameKind !== undefined ? "Leave game" : "Leave lesson"}
               </button>
             </div>
           ) : finished ? (
             <div className="lesson-body celebration">
-              <Frog variant={1} />
+              <Frog variant={1} crowned={progress.practicedToday} />
               <span className="eyebrow">ONE HOP FURTHER</span>
               <h1>Look at you grow!</h1>
-              <p>You finished a lesson. Pip knew you had it in you.</p>
+              <p>Daily practice, done. Riff’s crown is yours for today!</p>
               <div className="earned">
                 <Star /> +
                 {20 +
@@ -790,16 +874,19 @@ export default function App() {
               <button
                 className="primary"
                 onClick={() =>
-                  start(
-                    lessons.find((l) => !progress.completed.has(l.id)) ||
-                      lesson,
-                  )
+                  gameKind !== undefined
+                    ? startGame(gameKind, lesson.level)
+                    : start(
+                        lessons.find((l) => !progress.completed.has(l.id)) ||
+                          lesson,
+                      )
                 }
               >
-                Keep exploring <ArrowRight size={18} />
+                {gameKind !== undefined ? "Play again" : "Keep exploring"}{" "}
+                <ArrowRight size={18} />
               </button>
               <button className="text-btn" onClick={() => setLesson(null)}>
-                Back to my trail
+                {gameKind !== undefined ? "Back to games" : "Back to my trail"}
               </button>
             </div>
           ) : (
@@ -914,7 +1001,11 @@ export default function App() {
                     </button>
                   </div>
                   <button className="primary" onClick={advance}>
-                    {index === 5 ? "Finish lesson" : "Continue"}
+                    {index === 5
+                      ? gameKind !== undefined
+                        ? "Finish game"
+                        : "Finish lesson"
+                      : "Continue"}
                     <ArrowRight size={18} />
                   </button>
                 </div>
@@ -943,12 +1034,14 @@ export default function App() {
               setAuthMessage("");
               try {
                 const { error } = await supabase.auth.signInWithOtp({
-                  email,
+                  email: email.trim(),
                   options: { emailRedirectTo: window.location.origin },
                 });
                 setAuthMessage(
                   error
-                    ? error.message
+                    ? error.code === "email_address_not_authorized"
+                      ? "Email sign-in is currently limited to preview testers. You can keep learning as a guest."
+                      : error.message
                     : "Check your email for a sign-in link. You can keep playing here.",
                 );
               } catch {

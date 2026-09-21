@@ -59,6 +59,18 @@ test("every curriculum sound has credited, bundled Ogg audio", () => {
     expect(c.license).toBeTruthy();
   }
 });
+async function readModule(page: import("@playwright/test").Page) {
+  await page
+    .getByRole("button", { name: "Meet the sounds", exact: true })
+    .click();
+  while (
+    await page.getByRole("button", { name: "Next sound", exact: true }).count()
+  ) {
+    await page.getByRole("button", { name: "Next sound", exact: true }).click();
+  }
+  await page.getByRole("button", { name: "Check what I learned" }).click();
+}
+
 test("guest can finish lessons, retain XP, and unlock the next level", async ({
   page,
 }) => {
@@ -71,7 +83,10 @@ test("guest can finish lessons, retain XP, and unlock the next level", async ({
   await expect(
     page.getByRole("button", { name: "Find your footing, locked" }),
   ).toBeDisabled();
-  await page.getByRole("button", { name: "Let’s play", exact: true }).click();
+  await page
+    .getByRole("button", { name: "Start learning", exact: true })
+    .click();
+  await readModule(page);
   await page.getByRole("button", { name: "Play question sound" }).click();
   await expect(
     page.getByText("That recording could not play.", { exact: false }),
@@ -104,6 +119,7 @@ test("guest can finish lessons, retain XP, and unlock the next level", async ({
   await page.reload();
   await expect(page.getByText("1 / 15 lessons")).toBeVisible();
   await page.getByRole("button", { name: "Continue learning" }).click();
+  await readModule(page);
   for (let i = 0; i < 6; i++) {
     await page.locator(".answer").first().click();
     await page
@@ -150,7 +166,10 @@ test("library search, audio decode, exit confirmation, and small screen layout",
   });
   expect(decodable).toBeTruthy();
   await page.getByRole("button", { name: "My learning", exact: true }).click();
-  await page.getByRole("button", { name: "Let’s play", exact: true }).click();
+  await page
+    .getByRole("button", { name: "Start learning", exact: true })
+    .click();
+  await readModule(page);
   await page.getByRole("button", { name: "Exit lesson" }).click();
   await expect(page.getByText("Take a little break?")).toBeVisible();
   await page.getByRole("button", { name: "Leave lesson", exact: true }).click();
@@ -187,4 +206,26 @@ test("desktop visual and complete audio decode", async ({ page }) => {
     sounds.map((s) => s.id),
   );
   expect(decoded).toEqual([]);
+});
+
+test("daily crown expires while yesterday's streak survives; games do not unlock lessons", () => {
+  const e: LessonEvent = {
+    id: "practice",
+    lessonId: "game-0-1",
+    startedAt: "2026-09-21",
+    completedAt: "2026-09-21",
+    day: "2026-09-21",
+    attempts: [{ soundId: "sound-0", correct: true }],
+  };
+  const today = stats([e], new Date(2026, 8, 21));
+  expect(today.practicedToday).toBe(true);
+  expect(today.completed.size).toBe(0);
+  expect(today.gamesPlayed).toBe(1);
+  expect(today.xp).toBe(30);
+  const tomorrow = stats([e], new Date(2026, 8, 22));
+  expect(tomorrow.practicedToday).toBe(false);
+  expect(tomorrow.streak).toBe(1);
+  expect(
+    stats([{ ...e, completedAt: null }], new Date(2026, 8, 21)).practicedToday,
+  ).toBe(false);
 });

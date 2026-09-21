@@ -18,10 +18,18 @@ export function useProgress() {
     } = supabase.auth.onAuthStateChange((_event, session) => {
       setUser(session?.user || null);
     });
-    supabase.auth.getSession().then(({ data }) => {
-      setUser(data.session?.user || null);
-      if (!data.session) setReady(true);
-    });
+    supabase.auth
+      .getSession()
+      .then(({ data }) => {
+        setUser(data.session?.user || null);
+        if (!data.session) setReady(true);
+      })
+      .catch(() => {
+        setStatus(
+          "Account connection unavailable. You can keep learning as a guest.",
+        );
+        setReady(true);
+      });
     return () => subscription.unsubscribe();
   }, []);
   useEffect(() => {

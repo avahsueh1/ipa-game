@@ -1700,3 +1700,165 @@ p {
     scroll-behavior: auto !important;
   }
 }
+/* Guided lessons and the separate practice playground. */
+.study-body {
+  max-width: 760px;
+}
+.study-symbols {
+  display: flex;
+  justify-content: center;
+  gap: 18px;
+  margin: 34px 0;
+}
+.study-symbols span {
+  display: grid;
+  place-items: center;
+  width: 84px;
+  height: 84px;
+  border-radius: 24px;
+  background: #d9eee5;
+  font-size: 42px;
+}
+.study-body .study-symbol {
+  font-size: 76px;
+  margin: 12px 0;
+}
+.study-body h2 {
+  font-size: 19px;
+  margin-bottom: 24px;
+}
+.study-count {
+  color: #72816b;
+  font-size: 12px;
+}
+.study-example {
+  margin: 22px auto;
+  max-width: 440px;
+  line-height: 1.7;
+}
+.study-notes {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  text-align: left;
+  margin: 25px 0;
+}
+.study-notes > div {
+  background: white;
+  border: 1px solid #e0e6da;
+  border-radius: 18px;
+  padding: 21px;
+}
+.study-notes strong {
+  font-size: 14px;
+}
+.study-notes p {
+  font-size: 13px;
+  line-height: 1.6;
+  color: #6f7e69;
+}
+.study-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 25px;
+}
+.games-controls {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  margin: 30px 0;
+  font-size: 13px;
+}
+.games-controls select {
+  background: white;
+  color: #244e43;
+  border: 1px solid #d7e2d1;
+  padding: 12px 35px 12px 15px;
+  border-radius: 12px;
+  font: inherit;
+}
+.game-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+}
+.game-card {
+  background: white;
+  border: 1px solid #e0e6da;
+  border-radius: 24px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+.game-art {
+  border-radius: 17px;
+  min-height: 170px;
+  width: 100%;
+  display: grid;
+  place-items: center;
+  margin-bottom: 25px;
+  color: #44634e;
+}
+.game-card h2 {
+  font-size: 23px;
+  margin: 14px 0 0;
+}
+.game-card p {
+  font-size: 14px;
+  line-height: 1.7;
+  color: #6f7e69;
+  flex: 1;
+}
+.game-card .primary {
+  font-size: 12px;
+  padding: 13px;
+  width: 100%;
+  justify-content: space-between;
+}
+.game-card .eyebrow {
+  font-size: 9px;
+  letter-spacing: 1px;
+}
+.games-note {
+  color: #74836b;
+  font-size: 13px;
+  line-height: 1.8;
+  max-width: 660px;
+  margin: 28px auto;
+  text-align: center;
+}
+@media (max-width: 1050px) {
+  .game-grid {
+    grid-template-columns: 1fr;
+  }
+  .game-art {
+    min-height: 120px;
+  }
+}
+@media (max-width: 600px) {
+  .study-notes {
+    grid-template-columns: 1fr;
+  }
+  .study-notes > div {
+    padding: 15px;
+  }
+  .study-notes p {
+    margin-bottom: 0;
+  }
+  .games-controls {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+  .sidebar .nav {
+    padding: 7px 3px;
+  }
+}
+
+@media (max-width: 600px) {
+  .sidebar .brand-caption {
+    display: none;
+  }
+}

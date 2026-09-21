@@ -35,7 +35,13 @@ export function stats(events: LessonEvent[], now = new Date()) {
       0,
     ),
     streak,
-    completed: new Set(done.map((e) => e.lessonId)),
+    practicedToday: dates.has(localDay(now)),
+    gamesPlayed: done.filter((e) => e.lessonId.startsWith("game-")).length,
+    completed: new Set(
+      done
+        .filter((e) => !e.lessonId.startsWith("game-"))
+        .map((e) => e.lessonId),
+    ),
     learned: new Set(
       done.flatMap((e) =>
         e.attempts.filter((a) => a.correct).map((a) => a.soundId),

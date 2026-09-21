@@ -39,7 +39,7 @@ export function Games({
           {
             Icon: AudioLines,
             title: "Perfect match",
-            text: "Match a symbol to its sound.",
+            text: "Hear a sound and find its symbol.",
             color: "#e3e9fa",
           },
           {

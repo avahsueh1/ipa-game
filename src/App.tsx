@@ -939,11 +939,6 @@ export default function App() {
                   </button>
                 </div>
               )}
-              <p className="gentle-note">
-                Some recordings add “ah” around the consonant. Listen for the
-                consonant itself.
-                <br />
-              </p>
             </div>
           )}
         </div>

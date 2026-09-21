@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from "react";
 import {
   ArrowRight,
   AudioLines,
-  BookOpen,
   Check,
   ChevronRight,
   Compass,
@@ -16,7 +15,6 @@ import {
   Music2,
   Play,
   Search,
-  ShieldCheck,
   Sparkles,
   Star,
   Trophy,
@@ -270,7 +268,6 @@ export default function App() {
           />
           <img className="brand-icon" src="/ribbit-icon.svg" alt="" />
         </button>
-        <div className="brand-caption">RIBBIT · A WORLD OF SOUNDS</div>
         <nav aria-label="Main navigation">
           {(
             [
@@ -292,24 +289,13 @@ export default function App() {
           ))}
         </nav>
         <div className="sidebar-bottom">
-          <div className="little-note">
-            <Leaf size={23} />
-            <p>
-              A little practice.
-              <br />
-              <strong>A world of possibilities.</strong>
-            </p>
-          </div>
           <button className="credits-link" onClick={() => navigate("credits")}>
             <Headphones size={17} /> Audio & credits
           </button>
           <div className="guest">
             <span className="avatar">{user ? "Y" : "G"}</span>
             <div>
-              <strong>{user ? "Your account" : "Guest explorer"}</strong>
-              <small>
-                {user ? "Keep discovering" : "Make yourself at home"}
-              </small>
+              <strong>{user ? "Your account" : "Guest"}</strong>
             </div>
             {user ? (
               <button
@@ -341,7 +327,6 @@ export default function App() {
       <main inert={modalOpen}>
         <header className="topbar">
           <div className="breadcrumb">
-            Your sound adventure <ChevronRight size={14} />
             <span>
               {page === "learn"
                 ? "My learning"
@@ -370,31 +355,12 @@ export default function App() {
           {page === "games" && <Games start={startGame} ready={ready} />}
           {page === "learn" && (
             <>
-              <div className="page-heading">
-                <div className="eyebrow">
-                  <span /> SMALL HOPS. BIG DISCOVERIES.
-                </div>
-                <h1>
-                  A world of sounds awaits<span>.</span>
-                </h1>
-                <p>
-                  Meet new sounds. Find your voice. One little hop at a time.
-                </p>
-              </div>
               <section className="hero">
                 <div className="hero-copy">
-                  <span className="pill">
-                    <span /> YOUR NEXT ADVENTURE
-                  </span>
                   <div className="level-eyebrow">
-                    LEVEL {current.level} ·{" "}
-                    {levels[current.level - 1].idea.toUpperCase()}
+                    Unit {current.level} · Lesson {current.index + 1}
                   </div>
-                  <h2>{levels[current.level - 1].name}</h2>
-                  <p>
-                    {levels[current.level - 1].subtitle}.<br />
-                    Let’s turn them into your first IPA superpower.
-                  </p>
+                  <h1>{levels[current.level - 1].name}</h1>
                   <button
                     className="primary"
                     disabled={!ready}
@@ -405,39 +371,17 @@ export default function App() {
                       : "Start learning"}
                     <ArrowRight size={19} />
                   </button>
-                  <span className="under-button">
-                    <span>Learn + 6 questions</span>
-                    <span>~4 minutes</span>
-                    <span>No pressure</span>
-                  </span>
                 </div>
                 <div className="hero-art">
-                  <div className="orb" />
-                  <span className="floating-symbol symbol-p">/p/</span>
-                  <span className="floating-symbol symbol-m">/m/</span>
-                  <span className="floating-symbol symbol-b">/b/</span>
-                  <span className="spark spark-one">✳</span>
-                  <span className="spark spark-two">✧</span>
-                  <div className="frog-bubble">
-                    {progress.practicedToday
-                      ? "You earned my crown today!"
-                      : "Hi, I’m Riff. Let’s hop to it!"}
-                  </div>
                   <Frog crowned={progress.practicedToday} />
-                  <span className="frog-caption">
-                    TINY FROG. BIG CURIOSITY.
-                  </span>
                 </div>
               </section>
               <section className="journey">
                 <div className="section-heading">
                   <div>
-                    <h2>Your learning trail</h2>
-                    <p>
-                      Five little adventures. A whole new way to hear the world.
-                    </p>
+                    <h2>Units</h2>
                   </div>
-                  <span className="tag">
+                  <span className="lesson-count">
                     {progress.completed.size} / {lessons.length} lessons
                   </span>
                 </div>
@@ -485,7 +429,7 @@ export default function App() {
                           )}
                         </div>
                         <h3>{level.name}</h3>
-                        <p>{level.subtitle}</p>
+
                         <div className="mini-track">
                           <span
                             style={{
@@ -496,50 +440,14 @@ export default function App() {
                         <small>
                           {open
                             ? `${count} of ${levelLessons.length} lessons`
-                            : "Keep hopping to unlock"}
+                            : "Locked"}
                         </small>
                       </button>
                     );
                   })}
                 </div>
               </section>
-              <section className="bottom-grid">
-                <div className="what-card">
-                  <div className="round-icon">
-                    <BookOpen size={24} />
-                  </div>
-                  <div>
-                    <span className="eyebrow">A LITTLE INTRODUCTION</span>
-                    <h3>New to IPA? You’re in the right place.</h3>
-                    <p>
-                      The International Phonetic Alphabet is a set of symbols
-                      for speech sounds. One symbol, one sound. A secret code
-                      for your ears.
-                    </p>
-                    <button
-                      className="text-btn"
-                      onClick={() => navigate("library")}
-                    >
-                      Meet the sounds <ArrowRight size={16} />
-                    </button>
-                  </div>
-                </div>
-                <div className="kind-card">
-                  <span className="heart">♡</span>
-                  <h3>Room to get it wrong.</h3>
-                  <p>
-                    No hearts to lose. No timers to beat.
-                    <br />
-                    Just you, your curiosity, and a little frog
-                    <br className="desktop-break" /> cheering you on.
-                  </p>
-                  <span>YOU’RE DOING GREAT ALREADY.</span>
-                </div>
-              </section>
               <footer>
-                <span>
-                  <ShieldCheck size={15} /> Play freely. Grow at your own pace.
-                </span>
                 <span>{status}</span>
               </footer>
             </>
@@ -547,11 +455,7 @@ export default function App() {
           {page === "library" && (
             <>
               <div className="page-heading">
-                <div className="eyebrow">LISTEN. NOTICE. EXPLORE.</div>
-                <h1>
-                  A pocketful of sounds<span>.</span>
-                </h1>
-                <p>Tap a sound to hear it. Try it out. Make it your own.</p>
+                <h1>Sound library</h1>
               </div>
               <div className="library-toolbar">
                 <label className="search">
@@ -631,11 +535,7 @@ export default function App() {
           {page === "progress" && (
             <>
               <div className="page-heading">
-                <div className="eyebrow">EVERY LITTLE HOP COUNTS</div>
-                <h1>
-                  Look how far you’ve come<span>.</span>
-                </h1>
-                <p>Your adventure, at your pace.</p>
+                <h1>My progress</h1>
               </div>
               <div className="progress-grid">
                 {[
@@ -658,33 +558,28 @@ export default function App() {
                 <Frog crowned={progress.practicedToday} />
                 <div>
                   <h2>
-                    {progress.completed.size
-                      ? "Keep that curiosity growing."
-                      : "Your first hop is waiting."}
+                    {progress.practicedToday
+                      ? "Daily goal complete"
+                      : "Practice today"}
                   </h2>
                   <p>
-                    Earn 10 XP for a correct answer and 20 XP for finishing a
-                    lesson. Complete a lesson today to grow your streak.
+                    {progress.practicedToday
+                      ? "Riff earned a crown."
+                      : "Finish a lesson or game to earn Riff’s crown."}
                   </p>
                   <button
                     className="primary"
                     disabled={!ready}
                     onClick={() => start(current)}
                   >
-                    Take a little hop <ArrowRight size={18} />
+                    Continue learning <ArrowRight size={18} />
                   </button>
                 </div>
               </div>
-              <p className="fine-print">
-                {status}.{" "}
-                {user
-                  ? "Your account keeps your adventure together."
-                  : "Guest progress stays in this browser."}
-              </p>
+              <p className="fine-print">{status}</p>
               {!user && (
                 <button className="text-btn" onClick={() => setAccount(true)}>
-                  Parent or teacher? Save progress to an account{" "}
-                  <ArrowRight size={16} />
+                  Save progress <ArrowRight size={16} />
                 </button>
               )}
             </>
@@ -692,10 +587,7 @@ export default function App() {
           {page === "credits" && (
             <>
               <div className="page-heading">
-                <div className="eyebrow">A LITTLE THANK YOU</div>
-                <h1>
-                  The voices behind the sounds<span>.</span>
-                </h1>
+                <h1>Audio & credits</h1>
                 <p>
                   Real recordings, generously shared by the Wikimedia Commons
                   community.
@@ -837,7 +729,7 @@ export default function App() {
           </div>
           {exit ? (
             <div className="lesson-body">
-              <h1>Take a little break?</h1>
+              <h1>Leave this practice?</h1>
               <p>
                 Completed lessons are saved. This unfinished lesson won’t earn
                 XP.
@@ -858,9 +750,8 @@ export default function App() {
           ) : finished ? (
             <div className="lesson-body celebration">
               <Frog variant={1} crowned={progress.practicedToday} />
-              <span className="eyebrow">ONE HOP FURTHER</span>
-              <h1>Look at you grow!</h1>
-              <p>Daily practice, done. Riff’s crown is yours for today!</p>
+              <h1>Practice complete!</h1>
+              <p>Daily goal complete.</p>
               <div className="earned">
                 <Star /> +
                 {20 +
@@ -989,7 +880,7 @@ export default function App() {
                     <strong>
                       {answer === q.sound.id
                         ? "That’s the sound! +10 XP"
-                        : "A little discovery!"}
+                        : "Not quite."}
                     </strong>
                     <p>
                       {answer === q.sound.id
@@ -1014,7 +905,6 @@ export default function App() {
                 Some recordings add “ah” around the consonant. Listen for the
                 consonant itself.
                 <br />
-                No rush. Every guess is a chance to learn.
               </p>
             </div>
           )}
@@ -1059,8 +949,7 @@ export default function App() {
             >
               <X />
             </button>
-            <span className="eyebrow">KEEP YOUR ADVENTURE</span>
-            <h2>A home for your progress.</h2>
+            <h2>Save your progress</h2>
             <p>
               Parents, teachers, and adult learners can save progress with an
               email sign-in link. Kids can keep playing as guests without

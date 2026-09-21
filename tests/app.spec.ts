@@ -78,7 +78,7 @@ test("guest can finish lessons, retain XP, and unlock the next level", async ({
   page.on("pageerror", (e) => errors.push(e.message));
   await page.goto("/");
   await expect(
-    page.getByRole("heading", { name: "A world of sounds awaits." }),
+    page.getByRole("heading", { name: "First hops", level: 1 }),
   ).toBeVisible();
   await expect(
     page.getByRole("button", { name: "Find your footing, locked" }),
@@ -107,7 +107,7 @@ test("guest can finish lessons, retain XP, and unlock the next level", async ({
       .click();
   }
   await expect(
-    page.getByRole("heading", { name: "Look at you grow!" }),
+    page.getByRole("heading", { name: "Practice complete!" }),
   ).toBeVisible();
   const earned = await page.locator(".earned").innerText();
   expect(earned).toContain("XP");
@@ -171,7 +171,7 @@ test("library search, audio decode, exit confirmation, and small screen layout",
     .click();
   await readModule(page);
   await page.getByRole("button", { name: "Exit lesson" }).click();
-  await expect(page.getByText("Take a little break?")).toBeVisible();
+  await expect(page.getByText("Leave this practice?")).toBeVisible();
   await page.getByRole("button", { name: "Leave lesson", exact: true }).click();
   const events = await page.evaluate(() =>
     JSON.parse(localStorage.getItem("ribbit:guest:v1")!),

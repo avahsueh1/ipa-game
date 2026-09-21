@@ -81,11 +81,7 @@ export function LearningModule({
                 <span key={s.id}>{s.symbol}</span>
               ))}
             </div>
-            <p>
-              Meet {lesson.sounds.length} sounds, listen and try them out. Then
-              take a six-question check to finish your lesson and earn today’s
-              crown.
-            </p>
+            <p>{lesson.sounds.length} sounds · 6 practice questions</p>
             <button className="primary" onClick={() => setStep(0)}>
               Meet the sounds <ArrowRight size={18} />
             </button>

@@ -77,6 +77,7 @@ export default function App() {
   const [lesson, setLesson] = useState<Lesson | null>(null),
     [qs, setQs] = useState<Question[]>([]),
     [index, setIndex] = useState(0),
+    [pendingAnswer, setPendingAnswer] = useState<string | null>(null),
     [answer, setAnswer] = useState<string | null>(null),
     [event, setEvent] = useState<LessonEvent | null>(null),
     [finished, setFinished] = useState(false),
@@ -204,6 +205,7 @@ export default function App() {
     setQs(questions(next, kind));
     setIndex(0);
     setAnswer(null);
+    setPendingAnswer(null);
     setFinished(false);
     setExit(false);
     finishGuard.current = false;
@@ -220,6 +222,7 @@ export default function App() {
   }
   function choose(sound: Sound) {
     if (answer || !event) return;
+    stopAudio();
     setAnswer(sound.id);
     setEvent({
       ...event,
@@ -250,6 +253,7 @@ export default function App() {
     } else {
       setIndex(index + 1);
       setAnswer(null);
+      setPendingAnswer(null);
     }
   }
   function navigate(next: Page) {
@@ -779,7 +783,7 @@ export default function App() {
                 {q.kind === 0
                   ? "Tap to listen, then choose a symbol."
                   : q.kind === 1
-                    ? "Listen to each recording, then choose your match."
+                    ? "Listen to the recordings. Choose one, then check your answer."
                     : "Think about your mouth and how the air moves."}
               </p>
               {q.kind === 0 ? (
@@ -798,20 +802,24 @@ export default function App() {
               ) : (
                 <div className="question-symbol">
                   <span>{q.sound.symbol}</span>
-                  <button
-                    className="icon-btn"
-                    aria-label="Hear this symbol"
-                    onClick={() => play(q.sound)}
-                  >
-                    <Volume2 />
-                  </button>
+                  {q.kind !== 1 && (
+                    <button
+                      className="icon-btn"
+                      aria-label="Hear this symbol"
+                      onClick={() => play(q.sound)}
+                    >
+                      <Volume2 />
+                    </button>
+                  )}
                 </div>
               )}
-              <div className={`answers ${q.kind === 2 ? "features" : ""}`}>
+              <div
+                className={`answers ${q.kind === 2 ? "features" : q.kind === 1 ? "audio-answers" : ""}`}
+              >
                 {q.choices.map((s, i) => (
                   <div
                     key={s.id}
-                    className={`answer-wrap ${answer ? (s.id === q.sound.id ? "correct" : s.id === answer ? "incorrect" : "dim") : ""}`}
+                    className={`answer-wrap ${!answer && pendingAnswer === s.id ? "chosen" : ""} ${answer ? (s.id === q.sound.id ? "correct" : s.id === answer ? "incorrect" : "dim") : ""}`}
                   >
                     {q.kind === 1 && (
                       <button
@@ -820,19 +828,36 @@ export default function App() {
                         onClick={() => play(s)}
                       >
                         <Volume2 size={22} />
+                        {playing === s.id ? "Playing…" : `Listen ${i + 1}`}
                       </button>
                     )}
                     <button
                       className="answer"
+                      aria-label={
+                        q.kind === 1
+                          ? `${(answer || pendingAnswer) === s.id ? "Selected" : "Choose"} sound ${i + 1}`
+                          : undefined
+                      }
                       disabled={!!answer}
-                      onClick={() => choose(s)}
+                      aria-pressed={
+                        q.kind === 1
+                          ? (answer || pendingAnswer) === s.id
+                          : undefined
+                      }
+                      onClick={() =>
+                        q.kind === 1 ? setPendingAnswer(s.id) : choose(s)
+                      }
                     >
                       <span className="answer-number">{i + 1}</span>
                       <span className={q.kind === 0 ? "ipa" : ""}>
                         {q.kind === 0
                           ? s.symbol
                           : q.kind === 1
-                            ? `Sound ${i + 1}`
+                            ? answer
+                              ? `Sound ${i + 1}: /${s.symbol}/`
+                              : pendingAnswer === s.id
+                                ? `Selected sound ${i + 1}`
+                                : `Choose sound ${i + 1}`
                             : lesson.level === 5
                               ? s.name
                               : s.feature}
@@ -842,6 +867,20 @@ export default function App() {
                   </div>
                 ))}
               </div>
+              {q.kind === 1 && !answer && (
+                <button
+                  className="primary check-answer"
+                  disabled={!pendingAnswer}
+                  onClick={() => {
+                    const selected = q.choices.find(
+                      (s) => s.id === pendingAnswer,
+                    );
+                    if (selected) choose(selected);
+                  }}
+                >
+                  Check answer
+                </button>
+              )}
               {audioError && (
                 <p className="error" role="alert">
                   {audioError}
@@ -859,9 +898,11 @@ export default function App() {
                         : "Not quite."}
                     </strong>
                     <p>
-                      {answer === q.sound.id
-                        ? "Nice listening."
-                        : `The answer is /${q.sound.symbol}/. ${q.sound.feature}.`}
+                      {q.kind === 1
+                        ? `Sound ${q.choices.findIndex((s) => s.id === q.sound.id) + 1} is /${q.sound.symbol}/${q.sound.example ? `, as in “${q.sound.example}”` : ""}.`
+                        : answer === q.sound.id
+                          ? "Nice listening."
+                          : `The answer is /${q.sound.symbol}/. ${q.sound.feature}.`}
                     </p>
                     <button className="text-btn" onClick={() => play(q.sound)}>
                       <Volume2 size={16} /> Hear /{q.sound.symbol}/ again

@@ -98,6 +98,14 @@ test("guest can finish lessons, retain XP, and unlock the next level", async ({
         .click();
     }
     await page.locator(".answer").first().click();
+    if (
+      await page
+        .getByRole("button", { name: "Check answer", exact: true })
+        .count()
+    )
+      await page
+        .getByRole("button", { name: "Check answer", exact: true })
+        .click();
     await expect(page.locator(".feedback")).toBeVisible();
     await page
       .getByRole("button", {
@@ -122,6 +130,14 @@ test("guest can finish lessons, retain XP, and unlock the next level", async ({
   await readModule(page);
   for (let i = 0; i < 6; i++) {
     await page.locator(".answer").first().click();
+    if (
+      await page
+        .getByRole("button", { name: "Check answer", exact: true })
+        .count()
+    )
+      await page
+        .getByRole("button", { name: "Check answer", exact: true })
+        .click();
     await page
       .getByRole("button", {
         name: i === 5 ? "Finish lesson" : "Continue",
@@ -228,4 +244,39 @@ test("daily crown expires while yesterday's streak survives; games do not unlock
   expect(
     stats([{ ...e, completedAt: null }], new Date(2026, 8, 21)).practicedToday,
   ).toBe(false);
+});
+
+test("audio choices require explicit checking and listening never submits", async ({
+  page,
+}) => {
+  await page.goto("/");
+  await page.getByRole("button", { name: "Games", exact: true }).click();
+  await page
+    .getByRole("button", { name: "Play perfect match", exact: true })
+    .click();
+  await expect(
+    page.getByRole("button", { name: "Hear this symbol", exact: true }),
+  ).toHaveCount(0);
+  const check = page.getByRole("button", { name: "Check answer", exact: true });
+  await expect(check).toBeDisabled();
+  await page
+    .getByRole("button", { name: "Play option 1", exact: true })
+    .click();
+  await expect(page.locator(".feedback")).toHaveCount(0);
+  await expect(check).toBeDisabled();
+  await page
+    .getByRole("button", { name: "Choose sound 1", exact: true })
+    .click();
+  await expect(page.locator(".feedback")).toHaveCount(0);
+  await page
+    .getByRole("button", { name: "Choose sound 2", exact: true })
+    .click();
+  await expect(
+    page.getByRole("button", { name: "Selected sound 2", exact: true }),
+  ).toHaveAttribute("aria-pressed", "true");
+  await check.click();
+  await expect(page.locator(".feedback")).toContainText(/Sound [1-3] is/);
+  await page.getByRole("button", { name: "Continue", exact: true }).click();
+  await expect(check).toBeDisabled();
+  await expect(page.locator(".feedback")).toHaveCount(0);
 });

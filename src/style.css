@@ -2363,3 +2363,45 @@ footer {
     min-width: 90px;
   }
 }
+.audio-answers .answer-wrap {
+  flex-direction: column;
+}
+.audio-answers .option-audio {
+  min-height: 76px;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  font-size: 15px;
+}
+.audio-answers .answer {
+  min-height: 66px;
+  padding: 18px 10px;
+  font-size: 13px;
+}
+.audio-answers .answer-number {
+  display: none;
+}
+.audio-answers .chosen {
+  border-color: #43896f;
+  box-shadow: 0 3px 0 #43896f;
+}
+.audio-answers .chosen .answer {
+  background: #dceee4;
+}
+.check-answer {
+  margin: 0 auto 20px;
+}
+@media (max-width: 600px) {
+  .audio-answers .answer-wrap {
+    flex-direction: row;
+  }
+  .audio-answers .option-audio {
+    width: 45%;
+    min-height: 66px;
+  }
+  .audio-answers .answer {
+    width: 55%;
+  }
+}

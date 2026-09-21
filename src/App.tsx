@@ -751,7 +751,7 @@ export default function App() {
             <span>{finished ? 6 : index + 1} / 6</span>
           </div>
           {exit ? (
-            <div className="lesson-body">
+            <div className="lesson-body lesson-exit">
               <h1>Leave this practice?</h1>
               <p>
                 Completed lessons are saved. This unfinished lesson won’t earn

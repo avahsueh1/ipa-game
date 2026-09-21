@@ -118,15 +118,18 @@ export function IPAChart({
           play(s);
           requestAnimationFrame(() => {
             guide.current?.focus({ preventScroll: true });
-            guide.current?.scrollIntoView({
-              block: "nearest",
-              behavior: "auto",
-            });
           });
         }}
       >
         <span>{s.symbol}</span>
-        <small>{s.example || "Listen"}</small>
+        <small>
+          {s.example || (
+            <>
+              <Volume2 size={11} aria-hidden="true" />
+              Listen
+            </>
+          )}
+        </small>
       </button>
     ) : null;
   }

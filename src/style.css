@@ -1033,6 +1033,13 @@ select {
   padding: 20px 30px;
   font-size: 13px;
 }
+.chosen {
+  border-color: #43896f;
+  box-shadow: 0 3px 0 #43896f;
+}
+.chosen .answer {
+  background: #dceee4;
+}
 .correct {
   border-color: #79a36d;
   background: #e8f2df;
@@ -1106,6 +1113,14 @@ select {
 }
 .celebration > .text-btn {
   margin-top: 20px;
+}
+.lesson-exit > .primary,
+.lesson-exit > .text-btn {
+  display: flex;
+  margin: 0 auto;
+}
+.lesson-exit > .text-btn {
+  margin-top: 16px;
 }
 @media (min-width: 1500px) {
   .content {
@@ -2217,6 +2232,11 @@ footer {
 .chart-sound small {
   font-size: 10px;
   color: #64755d;
+}
+.chart-sound small > svg {
+  display: inline;
+  vertical-align: -1px;
+  margin-right: 3px;
 }
 .chart-other {
   display: flex;

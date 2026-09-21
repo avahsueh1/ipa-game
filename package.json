@@ -1,0 +1,43 @@
+{
+  "name": "ipa-game",
+  "version": "1.0.0",
+  "description": "Ribbit: a gentle IPA learning game with Pip the dart frog",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "test": "playwright test",
+    "audio:fetch": "node scripts/fetch-audio.mjs",
+    "format": "prettier --write src scripts tests *.ts *.json index.html public/brand.html",
+    "brand:preview": "node scripts/render-brand.mjs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/avahsueh1/ipa-game.git"
+  },
+  "keywords": [],
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/avahsueh1/ipa-game/issues"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.116.0",
+    "lucide-react": "^1.47.0",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.63.0",
+    "@resvg/resvg-js": "^2.6.2",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^6.1.1",
+    "prettier": "^3.9.8",
+    "typescript": "^7.0.2",
+    "vite": "^8.3.0"
+  },
+  "private": true,
+  "engines": {
+    "node": ">=24"
+  }
+}

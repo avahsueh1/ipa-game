@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en">
+  <meta charset="utf-8" /><meta
+    name="viewport"
+    content="width=device-width,initial-scale=1"
+  /><title>Ribbit — the phonetic wordmark</title
+  ><style>
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      background: #f8f9f5;
+      color: #285a4c;
+      font-family: Arial, sans-serif;
+    }
+    main {
+      max-width: 980px;
+      margin: auto;
+      padding: 64px 24px;
+    }
+    h1 {
+      font-size: 30px;
+      letter-spacing: -1px;
+      margin: 10px 0;
+    }
+    p {
+      color: #72816d;
+      font-size: 14px;
+      line-height: 1.8;
+    }
+    .eyebrow {
+      font-size: 10px;
+      letter-spacing: 2px;
+    }
+    section {
+      border: 1px solid #e0e8d8;
+      background: #fff;
+      border-radius: 22px;
+      margin: 35px 0;
+      min-height: 320px;
+      display: grid;
+      place-items: center;
+      padding: 35px;
+    }
+    .logo {
+      width: min(100%, 590px);
+    }
+    .swatches {
+      display: flex;
+      gap: 10px;
+    }
+    .swatches i {
+      height: 23px;
+      width: 23px;
+      border-radius: 50%;
+      display: block;
+    }
+    .below {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+    }
+    .icon {
+      width: 80px;
+    }
+    .download {
+      display: inline-block;
+      color: white;
+      background: #285a4c;
+      padding: 13px 20px;
+      border-radius: 9px;
+      text-decoration: none;
+      font-size: 13px;
+      margin: 10px 10px 0 0;
+    }
+    .secondary {
+      color: #285a4c;
+      background: #e7eee0;
+    }
+    code {
+      font-family: Arial, sans-serif;
+      font-size: 19px;
+    }
+    footer {
+      margin-top: 40px;
+      font-size: 11px;
+      color: #84917b;
+    }
+    @media (max-width: 500px) {
+      main {
+        padding: 35px 20px;
+      }
+      section {
+        min-height: 230px;
+        padding: 20px;
+      }
+      .below {
+        align-items: flex-start;
+      }
+    }
+  </style>
+  <main>
+    <span class="eyebrow">SMALL HOPS. BIG DISCOVERIES.</span>
+    <h1>Ribbit, spelled in sound.</h1>
+    <p>
+      A little frog. A little phonetics. A wordmark with a voice of its own.
+    </p>
+    <section>
+      <img
+        class="logo"
+        src="/logo.svg"
+        alt="Ribbit spelled /ˈɹɪbɪt/, with a turquoise frog"
+      />
+      <div class="swatches">
+        <i style="background: #285a4c"></i><i style="background: #55c6b5"></i
+        ><i style="background: #aa96c6"></i><i style="background: #eeab87"></i
+        ><i style="background: #edf5e8"></i>
+      </div>
+    </section>
+    <div class="below">
+      <div>
+        <code>/ˈɹɪbɪt/</code>
+        <p>
+          The coral mark says “stress this syllable.”<br />The lilac /ɪ/ sounds
+          are the short vowel in “kit.”<br />Every stroke is a vector path. No
+          fonts required.
+        </p>
+        <a class="download" download="ribbit-logo.svg" href="/logo.svg"
+          >Download the SVG logo ↓</a
+        ><a
+          class="download secondary"
+          download="ribbit-icon.svg"
+          href="/ribbit-icon.svg"
+          >Download the icon ↓</a
+        >
+      </div>
+      <img class="icon" src="/ribbit-icon.svg" alt="Ribbit frog app icon" />
+    </div>
+    <footer>
+      Original artwork for Ribbit · 2026 ·
+      <a href="/" style="color: inherit">Back to the app</a>
+    </footer>
+  </main>
+</html>

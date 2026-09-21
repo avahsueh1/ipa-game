@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 430 140" fill="none" role="img" aria-labelledby="title desc">
+ <title id="title">Ribbit — /ˈɹɪbɪt/</title>
+ <desc id="desc">A smiling turquoise frog beside a rounded phonetic wordmark, with a coral stress mark and lilac short vowels. All lettering is drawn as vector paths.</desc>
+ <!-- A tiny dart frog, kept simple enough for a favicon. -->
+ <path d="M15 65C7 40 30 31 42 47C54 31 77 40 69 65C83 101 1 101 15 65Z" fill="#55C6B5"/>
+ <circle cx="26" cy="55" r="10" fill="#FFFCED"/><circle cx="58" cy="55" r="10" fill="#FFFCED"/>
+ <circle cx="28" cy="56" r="4.5" fill="#244E43"/><circle cx="56" cy="56" r="4.5" fill="#244E43"/>
+ <path d="M32 76Q42 84 52 76" stroke="#244E43" stroke-width="4" stroke-linecap="round"/>
+ <circle cx="19" cy="75" r="4" fill="#F3B699"/><circle cx="65" cy="75" r="4" fill="#F3B699"/>
+ <g stroke-width="8" stroke-linecap="round" stroke-linejoin="round">
+  <!-- IPA delimiters. -->
+  <path d="M112 34L92 106M416 34L396 106" stroke="#95B8A5" stroke-width="5"/>
+  <!-- Primary stress. -->
+  <path d="M129 34L125 47" stroke="#EEAB87" stroke-width="7"/>
+  <!-- Turned r: /ɹ/. -->
+  <path d="M184 57V98M184 82C184 94 162 102 148 94" stroke="#285A4C"/>
+  <!-- Small-cap I: /ɪ/. -->
+  <path d="M205 58H223M214 58V98M205 98H223" stroke="#AA96C6" stroke-width="7"/>
+  <!-- /b/. -->
+  <path d="M246 34V98M246 77C246 51 284 51 284 77C284 104 246 104 246 77" stroke="#285A4C"/>
+  <!-- /ɪ/. -->
+  <path d="M305 58H323M314 58V98M305 98H323" stroke="#AA96C6" stroke-width="7"/>
+  <!-- /t/. -->
+  <path d="M353 42V84Q353 103 373 96M341 58H372" stroke="#285A4C"/>
+ </g>
+</svg>

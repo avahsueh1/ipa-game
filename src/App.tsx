@@ -23,6 +23,7 @@ import {
 } from "lucide-react";
 import { LearningModule } from "./LearningModule";
 import { Games } from "./Games";
+import { EnglishHint } from "./EnglishHint";
 import { Frog } from "./Frog";
 import { levels, lessons, sounds, type Lesson, type Sound } from "./data";
 import { localDay, stats, type LessonEvent } from "./progress";
@@ -508,11 +509,7 @@ export default function App() {
                       </div>
                       <h3>{s.name}</h3>
                       <p>{s.feature}</p>
-                      <small>
-                        {s.example
-                          ? `As in “${s.example}”`
-                          : `Level ${s.level} · Explore a new sound`}
-                      </small>
+                      <EnglishHint symbol={s.symbol} compact />
                       {playing === s.id && (
                         <span className="playing">Playing…</span>
                       )}

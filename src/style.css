@@ -2094,3 +2094,44 @@ footer {
     margin: 15px auto;
   }
 }
+.english-hint {
+  margin: 0 auto 16px;
+  max-width: 540px;
+}
+.english-cue {
+  font-size: 23px;
+  color: #285448;
+  margin: 5px 0 8px;
+  font-weight: 600;
+}
+.example-word {
+  white-space: nowrap;
+}
+.example-word strong {
+  color: #267e65;
+  text-decoration: underline;
+  text-decoration-thickness: 3px;
+  text-underline-offset: 5px;
+}
+.english-tip {
+  font-size: 14px;
+  line-height: 1.6;
+  margin: 0;
+  color: #63735f;
+}
+.english-hint.compact {
+  margin: 12px 0 0;
+}
+.english-hint.compact .english-cue {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.6;
+}
+@media (max-width: 600px) {
+  .english-cue {
+    font-size: 21px;
+  }
+  .english-tip {
+    font-size: 13px;
+  }
+}

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { ArrowRight, Volume2, X } from "lucide-react";
+import { EnglishHint } from "./EnglishHint";
 import { TutorialVisual } from "./TutorialVisual";
 import { levels, sounds, type Lesson, type Sound } from "./data";
 function explain(feature: string, sound: Sound) {
@@ -182,23 +183,15 @@ export function LearningModule({
               Sound {step + 1} of {lesson.sounds.length}
             </div>
             <h1 className="study-symbol">/{sound.symbol}/</h1>
+            <EnglishHint symbol={sound.symbol} />
             <details className="sound-term">
               <summary>Sound name</summary>
               {sound.name}
             </details>
             <button className="primary" onClick={() => play(sound)}>
               <Volume2 size={20} />
-              {playing === sound.id ? "Playing…" : "Listen and try"}
+              {playing === sound.id ? "Playing…" : "Hear the sound"}
             </button>
-            <p className="study-example">
-              {sound.example ? (
-                <>
-                  As in <strong>{sound.example}</strong>
-                </>
-              ) : (
-                "Listen and copy the recording."
-              )}
-            </p>
             <div className="study-notes">
               {explain(sound.feature, sound).map(({ part, title, note }, i) => (
                 <div key={part}>

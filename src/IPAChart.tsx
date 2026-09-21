@@ -242,20 +242,43 @@ export function IPAChart({
         </section>
       )}
       {symbols.has("w") && (
-        <div className="chart-other">
-          {tile("w")}
-          <span>
-            <strong>Two positions together</strong>
-            <small>Round lips + back of tongue</small>
-            <div className="chart-w-visuals">
-              <TutorialVisual feature="Round lips" />
-              <TutorialVisual
-                feature="Back of mouth"
-                sound={symbols.get("w")}
-              />
+        <section className="w-sound-guide" aria-label="How to say w">
+          <div className="w-guide-heading">
+            {tile("w")}
+            <div>
+              <h3>“w” as in water</h3>
+              <p>Round your lips, then open them as you start “water.”</p>
             </div>
-          </span>
-        </div>
+          </div>
+          <div className="w-guide-steps">
+            <figure>
+              <TutorialVisual feature="Round lips" />
+              <figcaption>1. Round your lips</figcaption>
+            </figure>
+            <ArrowRight className="w-step-arrow" aria-hidden="true" />
+            <figure>
+              <TutorialVisual feature="relaxed lips" />
+              <figcaption>2. Open into the word</figcaption>
+            </figure>
+          </div>
+          <div className="w-guide-actions">
+            <button
+              className="text-btn"
+              onClick={() => play(symbols.get("w")!)}
+            >
+              <Volume2 size={18} />
+              {playing === symbols.get("w")!.id ? "Playing…" : "Hear /w/"}
+            </button>
+            <button
+              className="text-btn"
+              disabled={!ready}
+              onClick={() => learn(symbols.get("w")!)}
+            >
+              Try the tutorial
+              <ArrowRight size={17} />
+            </button>
+          </div>
+        </section>
       )}
       {vowels.length > 0 && (
         <section>
